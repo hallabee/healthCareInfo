@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>회원가입</title>
+    <link rel="stylesheet" href="static\register.css">
+</head>
+<body>
+    <form action="/register2" method="POST" class="joinForm" onsubmit="DoJoinForm__submit(this); return false;">
+
+      <h2>회원가입</h2>
+      <div class="textForm">
+        <input name="username" type="text" class="name" placeholder="이름">
+      </div>
+      <div class="textForm">
+        <input name="user_id" type="text" class="id" placeholder="아이디">
+      </div>
+      <div class="textForm">
+        <input name="password" type="password" class="pw" placeholder="비밀번호">
+      </div>
+      <div class="textForm">
+        <input name="phone" type="text" class="phone" placeholder="전화번호">
+      </div>
+      <div class="textForm">
+        <input name="address" type="text" class="address" placeholder="주소">
+      </div>
+      <input type="submit" class="btn" value="회원가입"/>
+    </form>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>어르신 추가하기</title>
+    <link rel="stylesheet" href="static\oldperson.css">
+    <script>
+        function execDaumPostcode() {
+          new daum.Postcode( {
+            oncomplete: function( data ) {
+              document.getElementById( 'address' ).value = data.zonecode;
+              document.getElementById( 'Road name address' ).value = data.address;
+            }
+          } ).open();
+        }
+        function oninputPhone(target) {
+            target.value = target.value
+                .replace(/[^0-9]/g, '')
+                .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
+        }
+        function confirmDelete() {
+            return confirm("정말로 삭제하시겠습니까?");
+        }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <h1 align="center">노인건강관리 시스템</h1>
+    </header>
+    <div class="sidebar">
+    <a href="login">홈</a>
+    <a href="oldperson">어르신 추가하기</a>
+    {% for oldname in oldnames %}
+        <a href="{{ url_for('oldperson_info', oldname=oldname) }}">
+            {{ oldname}}
+            <form class="delete-form" action="{{ url_for('delete_oldperson', oldname=oldname) }}" method="post" onsubmit="return confirmDelete()">
+                    <input type="image" src="static\garbage.png" alt="삭제" width="20" height="20" >
+            </form>
+        </a>
+    {% endfor %}
+    </div>
+    <div class="content">
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <form method="POST" action="/oldperson" onsubmit="return validateForm()">
+            <div class="form-container">
+            <div class="left-column">
+            <div class="list-class">
+            <label><span>* </span>이름</label>
+            <input type="text" id="oldname" name="oldname">
+            </div>
+            <div class="radio-class">
+            <label><span> *</span>성별</label>
+            <ul class="radio-list" id="sex1">
+                <li class="radio_item">
+            <input type="radio" id="sex_male" name="sex" value="남">
+            <label for="sex_male">남자</label>
+                </li>
+                <li class="radio_item">
+            <input type="radio" id="sex_female" name="sex" value="여">
+            <label for="sex_female">여자</label>
+                </li>
+            </ul>
+            </div>
+            <div class="list-class">
+            <label for="birth"><span>* </span>생년월일</label>
+            <input type="date" id="birth" name="birth" required pattern="\d{4}-\d{2}-\d{2}">
+            </div>
+            <div class="list-class" >
+            <label><span>* </span>나이</label>
+            <input type="number" id="age" name="age">
+            </div>
+            <div class="list-class">
+            <label><span>* </span>키</label>
+            <input type="number" id="height" name="height">
+            </div>
+            <div class="list-class">
+            <label><span>* </span>몸무게</label>
+            <input type="number" id="weight" name="weight">
+            </div>
+            </div>
+            <div class="right-column">
+            <div class="list-class">
+            <label><span>* </span>보호자 이름</label>
+            <input type="text" id="guardian" name="guardian">
+            </div>
+            <div class="list-class">
+            <label><span>* </span>보호자 연락처</label>
+            <input type="text" id="phone" oninput="oninputPhone(this)" maxlength="14" name="phone">
+            </div>
+            <div class="list-class">
+            <label><span>* </span>보호자 주소</label>
+            <input type="text" id="address" placeholder="우편번호" readonly name="address">
+            <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+            <input type="text" id="Road name address" name="road_name_address" placeholder="도로명주소" style="width:400px" >
+            <input type="text" id="Detailed address" name="detailed_address" placeholder="상세주소" style="width:400px">
+            </div>
+            <div class="button-class">
+            <input type="submit" value="확인">
+            </div>
+            </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

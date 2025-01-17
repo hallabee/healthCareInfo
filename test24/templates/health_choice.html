@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='oldperson.css') }}">
+    <script>
+        function confirmDelete() {
+            return confirm("정말로 삭제하시겠습니까?");
+        }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <h1 align="center">{{ oldperson_info[2] }}님 건강 관리 운동</h1>
+    </header>
+    <div class="sidebar">
+        <a href="login">홈</a>
+        <a href="oldperson">어르신 추가하기</a>
+        {% for oldname in oldnames %}
+            <a href="{{ url_for('oldperson_info', oldname=oldname) }}">
+                {{ oldname}}
+                <form class="delete-form" action="{{ url_for('delete_oldperson', oldname=oldname) }}" method="post" onsubmit="return confirmDelete()">
+                        <input type="image" src="{{ url_for('static', filename='garbage.png') }}" alt="삭제" width="20" height="20" >
+                </form>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="content">
+        <div style="display: flex; gap: 10px">
+            <form action="/healthcare/{{ oldperson_info[2] }}" method="post">
+                <input type="image" src="{{ url_for('static', filename='oldperson.jpg') }}" alt="팔운동2" width="300" height="200" style="border: 2px solid;" >
+            </form>
+            <form action="/healthcare_shoulder/{{ oldperson_info[2] }}" method="post">
+                <input type="image" src="{{ url_for('static', filename='oldperson2.jpg') }}" alt="어깨운동2" width="300" height="200" style="border: 2px solid;" >
+            </form>
+        </div>
+    </div>
+</body>
+</html>

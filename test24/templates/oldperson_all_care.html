@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='oldperson.css') }}">
+    <script>
+        function confirmDelete() {
+            return confirm("정말로 삭제하시겠습니까?");
+        }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <h1 align="center">{{ oldperson_info[2] }}님 상세건강정보</h1>
+    </header>
+    <div class="sidebar">
+    <a href="{{ url_for('login') }}">홈</a>
+    <a href="{{ url_for('oldperson') }}">어르신 추가하기</a>
+    {% for oldname in oldnames %}
+        <a href="{{ url_for('oldperson_info', oldname=oldname) }}">
+            {{ oldname}}
+            <form class="delete-form" action="{{ url_for('delete_oldperson', oldname=oldname) }}" method="post" onsubmit="return confirmDelete()">
+                <input type="image" src="{{ url_for('static', filename='garbage.png') }}" alt="삭제" width="20" height="20">
+            </form>
+        </a>
+    {% endfor %}
+    </div>
+    <div class="content">
+        <div class="healthcare-table">
+            <table border="1" class="style-table">
+                <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>운동</th>
+                        <th>단계</th>
+                        <th>횟수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for care in healthcare %}
+                    <tr>
+                        <td>{{ care[2] }}</td>
+                        <td>{{ care[3] }}</td>
+                        <td>{{ care[4] }} 단계</td>
+                        <td>{{ care[5] }} 번</td>
+                        <td>
+                            <form action="{{ url_for('delete_healthcare', oldname=oldperson_info[2], id=care[0]) }}"
+                                  method="post" onsubmit="return confirmDelete()">
+                                <input type="submit" value="삭제" class="delete-btn">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

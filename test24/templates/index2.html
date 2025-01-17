@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="static\index.css">
+</head>
+<body>
+    {% if error_message %}
+        <script>
+            alert('{{ error_message }}');
+        </script>
+    {% endif %}
+    <div class="login-wrapper">
+        <h1 align="center" style="margin-bottom: 50px;">노인건강관리 시스템</h1>
+        <h2>Login</h2>
+        <form method="post" action="/" id="login-form">
+            <input type="text" name="user_id" placeholder="id">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" value="Login">
+            <a href="register2">회원가입</a>
+        </form>
+    </div>
+</body>
+</html>

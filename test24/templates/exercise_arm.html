@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='oldperson.css') }}">
+    <script>
+        function startWebcam() {
+            fetch('/start_webcam', { method: 'POST' })
+            setTimeout(function(){
+                location.reload();
+            }, 10000);
+            return confirm("10초 뒤에 카메라가 자동으로 켜집니다.");
+        }
+
+        function stopWebcam() {
+            fetch('/stop_webcam', { method: 'POST' })
+        }
+
+        function validateForm() {
+            var count = document.forms["exerciseForm"]["count"].value;
+            if (count == "" || isNaN(count)) {
+                alert("숫자를 입력하세요");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <h1 align="center">시니어 팔 운동</h1>
+    </header>
+    <div class="sidebar">
+    <a href="{{ url_for('login') }}">홈</a>
+    <a href="{{ url_for('exercise_arm') }}">팔운동</a>
+    <a href="{{ url_for('exercise_shoulder') }}">어깨운동</a>
+    </div>
+    <div class="content">
+        <div class="parent-box">
+            <div class="left-box">
+                <div class="video-container">
+                    <img src="{{ url_for('video_feed') }}">
+                </div>
+            </div>
+            <div class="right-box">
+                <div class="video-container">
+                    <video controls>
+                         <source src="{{ url_for('static', filename='팔운동2.mp4') }}" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <form name="exerciseForm" action="{{ url_for('set_count_test') }}" method="post" onsubmit="return validateForm()">
+            원하는 카운트 수: <input type="number" name="count">
+            단계 선택:
+            <select name="level" class="dropdown">
+                <option value="1">1단계</option>
+                <option value="2">2단계</option>
+                <option value="3">3단계</option>
+            </select>
+            <input type="submit" value="시작" class="op-btn">
+        </form>
+
+        <div class="webcam" style="display: flex; gap: 10px">
+            <button onclick="stopWebcam()">웹캠 끄기</button>
+            <button onclick="startWebcam()">웹캠 켜기(10초)</button>
+        </div>
+
+
+
+    </div>
+
+
+</body>
+</html>

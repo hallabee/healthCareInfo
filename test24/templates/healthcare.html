@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='oldperson.css') }}">
+    <script>
+        function startWebcam() {
+            fetch('/start_webcam', { method: 'POST' })
+            setTimeout(function(){
+                location.reload();
+            }, 10000);
+            return confirm("10초 뒤에 카메라가 자동으로 켜집니다.");
+        }
+
+        function stopWebcam() {
+            fetch('/stop_webcam', { method: 'POST' })
+        }
+
+        function transmission() {
+            fetch('/transmission', { method: 'POST' })
+            return confirm("운동 정보를 전송 하겠습니다. (단, 웹캠은 종료되지 않습니다.)");
+        }
+
+        function validateForm() {
+            var count = document.forms["exerciseForm"]["count"].value;
+            if (count == "" || isNaN(count)) {
+                alert("숫자를 입력하세요");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <header class="header1">
+        <h1 align="center">{{ oldperson_info[2] }}님 팔 운동</h1>
+    </header>
+    <div class="sidebar">
+    <a href="{{ url_for('login') }}">홈</a>
+    <a href="{{ url_for('oldperson') }}">어르신 추가하기</a>
+        {% for oldname in oldnames %}
+            <a href="{{ url_for('oldperson_info', oldname=oldname) }}">
+                {{ oldname}}
+                <form class="delete-form" action="{{ url_for('delete_oldperson', oldname=oldname) }}" method="post" onsubmit="return confirmDelete()">
+                    <input type="image" src="{{ url_for('static', filename='garbage.png') }}" alt="삭제" width="20" height="20">
+                </form>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="content">
+        <div class="parent-box">
+            <div class="left-box">
+                <div class="video-container">
+                    <img src="{{ url_for('video_feed') }}">
+                </div>
+            </div>
+            <div class="right-box">
+                <div class="video-container">
+                    <video controls>
+                         <source src="{{ url_for('static', filename='팔운동2.mp4') }}" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <form name="exerciseForm" action="{{ url_for('set_count') }}" method="post" onsubmit="return validateForm()">
+            <input type="number" name="count" placeholder="원하는 카운트 수">
+            <select name="level" class="dropdown">
+                <option value="">단계 선택</option>
+                <option value="1">1단계</option>
+                <option value="2">2단계</option>
+                <option value="3">3단계</option>
+            </select>
+            <input type="hidden" name="oldname" value="{{ oldperson_info[2] }}">
+            <input type="submit" value="시작" class="op-btn">
+        </form>
+
+        <div style="display: flex; gap: 10px">
+            <form action="{{url_for('transmission')}}" method="post">
+                <input type="hidden" name="oldname" value="{{ oldperson_info[2] }}">
+                <input type="hidden" name="filename" value="팔운동2">
+                <input type="hidden" name="count" value="{{ request.form['count'] }}">
+                <input type="hidden" name="level" value="{{ request.form['level'] }}">
+                <button onclick="transmission()">운동 정보 보내기</button>
+            </form>
+            <button onclick="stopWebcam()">웹캠 끄기</button>
+            <button onclick="startWebcam()">웹캠 켜기(10초)</button>
+        </div>
+
+
+
+    </div>
+
+
+</body>
+</html>

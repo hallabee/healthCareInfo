@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='oldperson.css') }}">
+    <script>
+        function confirmDelete() {
+            return confirm("정말로 삭제하시겠습니까?");
+        }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <h1 align="center">{{ oldperson_info[2] }}님 기본정보</h1>
+    </header>
+    <div class="sidebar">
+    <a href="{{ url_for('login') }}">홈</a>
+    <a href="{{ url_for('oldperson') }}">어르신 추가하기</a>
+        {% for oldname in oldnames %}
+            <a href="{{ url_for('oldperson_info', oldname=oldname) }}">
+                {{ oldname}}
+                <form class="delete-form" action="{{ url_for('delete_oldperson', oldname=oldname) }}" method="post" onsubmit="return confirmDelete()">
+                    <input type="image" src="{{ url_for('static', filename='garbage.png') }}" alt="삭제" width="20" height="20">
+                </form>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="content">
+        <div class="parent-box">
+            <div class="left-box">
+                <fieldset class="fid1">
+                    <legend><h2>{{ oldperson_info[2] }}님</h2></legend>
+                    <p>성별: {{ oldperson_info[3] }}</p>
+                    <p>생년월일: {{ oldperson_info[4] }}</p>
+                    <p>나이: {{ oldperson_info[5] }}세</p>
+                    <p>키: {{ oldperson_info[6] }}cm</p>
+                    <p>몸무게: {{ oldperson_info[7] }}kg</p>
+                </fieldset>
+            </div>
+            <div class="right-box">
+                <fieldset class="fid2">
+                    <legend><h2>{{ oldperson_info[2] }}님 보호자</h2></legend>
+                    <p>보호자: {{ oldperson_info[8] }}</p>
+                    <p>보호자 연락처: {{ oldperson_info[9] }}</p>
+                    <p>보호자 주소: {{ oldperson_info[10] }} {{ oldperson_info[11] }} {{ oldperson_info[12] }}</p>
+                </fieldset>
+            </div>
+        </div>
+        <br><br>
+        <h2>건강 상태 입력</h2>
+        <form method="post" action="/oldperson_info/{{ oldperson_info[2] }}" >
+            <div class="condition">
+                <input type="hidden" name="oldname" value="{{ oldperson_info[2] }}">
+                <input type="date" name="date" placeholder="날짜" style="height:30px;">
+                <input type="text" name="blood_pressure" placeholder="혈압" style="height:30px;">
+                <input type="text" name="blood_sugar" placeholder="혈당" style="height:30px;">
+                <input type="text" name="healthinfo" placeholder="건강 상태" style="width:300px; height:30px;">
+                <input type="submit" value="입력" style="height:30px;">
+            </div>
+        </form>
+
+        <br>
+        <form method="post" action="/oldperson_all_info/{{ oldperson_info[2] }}">
+            <input type="submit" value="건강 상태 상세 페이지" style="height:30px;">
+        </form>
+        <br>
+        <div class="healthinfo-table">
+            <table border="1" class="style-table">
+                <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>혈압</th>
+                        <th>혈당</th>
+                        <th style="text-align:center;">건강 상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for info in healthinfo %}
+                    <tr>
+                        <td>{{ info[2] }}</td>
+                        <td>{{ info[3] }}mmHg</td>
+                        <td>{{ info[4] }}mg/dL</td>
+                        <td>{{ info[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <h2>건강 관리 운동</h2>
+        <div style="display: flex; gap: 10px">
+            <form method="post" action="/health_choice/{{ oldperson_info[2] }}">
+                <input type="submit" value="건강 관리 운동" style="height:30px;">
+            </form>
+            <form method="post" action="/oldperson_all_care/{{ oldperson_info[2] }}">
+                <input type="submit" value="건강 운동 상세 페이지" style="height:30px;">
+            </form>
+        </div>
+
+        <br>
+        <div class="healthcare-table">
+            <table border="1" class="style-table">
+                <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>운동</th>
+                        <th>단계</th>
+                        <th>횟수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for care in healthcare %}
+                    <tr>
+                        <td>{{ care[2] }}</td>
+                        <td>{{ care[3] }}</td>
+                        <td>{{ care[4] }} 단계</td>
+                        <td>{{ care[5] }} 번</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
